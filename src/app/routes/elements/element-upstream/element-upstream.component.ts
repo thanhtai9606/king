@@ -11,10 +11,18 @@ import { ToastService } from '../../../services/toast.service';
 @Component({
     selector: 'app-element-upstream',
     templateUrl: './element-upstream.component.html',
-    styleUrls: ['./element-upstream.component.scss']
+    styleUrls: ['./element-upstream.component.scss'],
 })
 export class ElementUpstreamComponent implements OnInit, AfterViewInit {
-    displayedColumns: string[] = ['id', 'name', 'algorithm', 'hash_on', 'hash_fallback', 'health', 'tags', 'actions'];
+    displayedColumns: string[] = [
+        'name',
+        'algorithm',
+        'hash_on',
+        'hash_fallback',
+        'health',
+        'tags',
+        'actions',
+    ];
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -24,8 +32,12 @@ export class ElementUpstreamComponent implements OnInit, AfterViewInit {
     filter = '';
     healths = {};
 
-    constructor(private api: ApiService, private toast: ToastService, private route: Router, private dialogHelper: DialogHelperService) {
-    }
+    constructor(
+        private api: ApiService,
+        private toast: ToastService,
+        private route: Router,
+        private dialogHelper: DialogHelperService
+    ) {}
 
     ngOnInit(): void {
         // Aquí para que no error de ExpressionChangedAfterItHasBeenCheckedError
@@ -42,7 +54,8 @@ export class ElementUpstreamComponent implements OnInit, AfterViewInit {
             this.filter = '';
         }
 
-        this.getData().then((value) => {
+        this.getData().then(
+            (value) => {
                 this.dataSource = new MatTableDataSource(value);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
@@ -53,7 +66,8 @@ export class ElementUpstreamComponent implements OnInit, AfterViewInit {
                 this.toast.error('error.node_connection');
                 this.loading = false;
                 this.applyFilter();
-            });
+            }
+        );
     }
 
     /*
@@ -95,7 +109,8 @@ export class ElementUpstreamComponent implements OnInit, AfterViewInit {
         Añade un servicio nuevo
      */
     addEdit(selected = null) {
-        this.dialogHelper.addEdit(selected, 'upstream')
+        this.dialogHelper
+            .addEdit(selected, 'upstream')
             .then(() => {
                 if (selected) {
                     // Edición
@@ -119,8 +134,11 @@ export class ElementUpstreamComponent implements OnInit, AfterViewInit {
         Borra el elemento seleccionado
      */
     delete(select) {
-        this.dialogHelper.deleteElement(select, 'upstream')
-            .then(() => { this.reloadData(); })
+        this.dialogHelper
+            .deleteElement(select, 'upstream')
+            .then(() => {
+                this.reloadData();
+            })
             .catch(() => {});
     }
 
@@ -128,7 +146,7 @@ export class ElementUpstreamComponent implements OnInit, AfterViewInit {
         Muestra la información del Target
      */
     showTarget(target) {
-        target['data'] = {upstream: target['upstream']};
+        target['data'] = { upstream: target['upstream'] };
         this.dialogHelper.showInfoElement(target, 'target');
     }
 
@@ -138,8 +156,11 @@ export class ElementUpstreamComponent implements OnInit, AfterViewInit {
     deleteTarget(target, event) {
         event.stopPropagation();
 
-        this.dialogHelper.deleteElement(target, 'target')
-            .then(() => { this.reloadData(); })
+        this.dialogHelper
+            .deleteElement(target, 'target')
+            .then(() => {
+                this.reloadData();
+            })
             .catch(() => {});
     }
 }

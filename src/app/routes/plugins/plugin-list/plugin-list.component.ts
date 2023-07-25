@@ -21,7 +21,6 @@ import { ToastService } from '../../../services/toast.service';
 export class PluginListComponent implements OnInit, OnDestroy {
     displayedColumns: string[] = [
         'enabled',
-        'id',
         'name',
         'route',
         'service',

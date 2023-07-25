@@ -18,6 +18,7 @@
                     <mat-label>{{'text.templates' | translate}}</mat-label>
                     <mat-select (selectionChange)="onPluginChange($event)">
                         <mat-option *ngFor="let plugin of plugins" [value]="plugin.id">
+
                             ({{ plugin.name }}) {{ plugin.instance_name }}
                         </mat-option>
                     </mat-select>
