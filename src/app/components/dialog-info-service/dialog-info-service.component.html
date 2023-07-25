@@ -1,14 +1,29 @@
 <div fxLayout="column" fxLayoutAlign="start stretch">
-    <h2 class="margin-bottom-5-i" fxFlex fxLayout="row" fxLayoutAlign="space-between start" mat-dialog-title>
-        <span>{{'service.dialog.info' | translate}}</span>
+    <h2
+        class="margin-bottom-5-i"
+        fxFlex
+        fxLayout="row"
+        fxLayoutAlign="space-between start"
+        mat-dialog-title
+    >
+        <span>{{ 'service.dialog.info' | translate }}</span>
 
         <span fxFlexAlign="end">
-            <a href="https://docs.konghq.com/gateway/latest/admin-api/#service-object" mat-button rel="noopener noreferrer" target="_blank">
-                {{'text.documentation' | translate}}
+            <a
+                href="https://docs.konghq.com/gateway/latest/admin-api/#service-object"
+                mat-button
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                {{ 'text.documentation' | translate }}
                 <mat-icon class="mini-icon">open_in_new</mat-icon>
             </a>
-            <button (click)="downloadJson()" mat-icon-button
-                    matTooltip="{{'dialog.download_json' | translate}}" matTooltipClass="tooltip-teal">
+            <button
+                (click)="downloadJson()"
+                mat-icon-button
+                matTooltip="{{ 'dialog.download_json' | translate }}"
+                matTooltipClass="tooltip-teal"
+            >
                 <mat-icon>download</mat-icon>
             </button>
         </span>
@@ -18,7 +33,10 @@
 
     <div [fxShow]="loading" fxFlex fxLayoutAlign="center center">
         <p fxFlex="50">
-            <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
+            <mat-progress-bar
+                color="accent"
+                mode="indeterminate"
+            ></mat-progress-bar>
         </p>
     </div>
 
@@ -26,100 +44,209 @@
         <mat-dialog-content *ngIf="service && !loading" class="margin-0-i">
             <div fxLayout="row">
                 <div fxFlex="50">
-                    <p class="title margin-0-i">{{'text.name' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['name']}}</p>
+                    <p class="title margin-0-i">
+                        {{ 'text.name' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">{{ service['name'] }}</p>
                 </div>
                 <div fxFlex="50">
-                    <p class="title margin-0-i">{{'text.id' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['id']}}</p>
+                    <p class="title margin-0-i">{{ 'text.id' | translate }}</p>
+                    <p class="text margin-left-20-i">{{ service['id'] }}</p>
                 </div>
             </div>
             <div fxLayout="row">
                 <div fxFlex="50">
-                    <p class="title margin-0-i">{{'text.created_at' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['created_at'] * 1000 | date:'medium'}}</p>
+                    <p class="title margin-0-i">
+                        {{ 'text.created_at' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">
+                        {{ service['created_at'] * 1000 | date : 'medium' }}
+                    </p>
                 </div>
                 <div fxFlex="50">
-                    <p class="title margin-0-i">{{'text.updated_at' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['updated_at'] * 1000 | date:'medium'}}</p>
+                    <p class="title margin-0-i">
+                        {{ 'text.updated_at' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">
+                        {{ service['updated_at'] * 1000 | date : 'medium' }}
+                    </p>
                 </div>
             </div>
 
             <div class="margin-top-10-i" fxLayout="row">
                 <div fxFlex="25">
-                    <p class="title margin-0-i">{{'service.dialog.protocol' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['protocol']}}</p>
+                    <p class="title margin-0-i">
+                        {{ 'service.dialog.protocol' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">
+                        {{ service['protocol'] }}
+                    </p>
                 </div>
                 <div fxFlex="25">
-                    <p class="title margin-0-i">{{'service.dialog.host' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['host']}}</p>
+                    <p class="title margin-0-i">
+                        {{ 'service.dialog.host' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">{{ service['host'] }}</p>
                 </div>
                 <div fxFlex="25">
-                    <p class="title margin-0-i">{{'service.dialog.port' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['port']}}</p>
+                    <p class="title margin-0-i">
+                        {{ 'service.dialog.port' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">{{ service['port'] }}</p>
                 </div>
                 <div fxFlex="25">
-                    <p class="title margin-0-i">{{'service.dialog.path' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['path']}}</p>
+                    <p class="title margin-0-i">
+                        {{ 'service.dialog.path' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">{{ service['path'] }}</p>
                 </div>
             </div>
 
             <div class="margin-top-10-i" fxLayout="row">
                 <div fxFlex="25">
-                    <p class="title margin-0-i">{{'service.dialog.retries' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['retries']}}</p>
+                    <p class="title margin-0-i">
+                        {{ 'service.dialog.retries' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">
+                        {{ service['retries'] }}
+                    </p>
                 </div>
                 <div fxFlex="25">
-                    <p class="title margin-0-i" matTooltip="{{'service.dialog.connect_tooltip' | translate}}"
-                       matTooltipClass="tooltip-teal">{{'service.dialog.connect_timeout' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['connect_timeout']}}</p>
+                    <p
+                        class="title margin-0-i"
+                        matTooltip="{{
+                            'service.dialog.connect_tooltip' | translate
+                        }}"
+                        matTooltipClass="tooltip-teal"
+                    >
+                        {{ 'service.dialog.connect_timeout' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">
+                        {{ service['connect_timeout'] }}
+                    </p>
                 </div>
                 <div fxFlex="25">
-                    <p class="title margin-0-i" matTooltip="{{'service.dialog.read_tooltip' | translate}}"
-                       matTooltipClass="tooltip-teal">{{'service.dialog.read_timeout' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['read_timeout']}}</p>
+                    <p
+                        class="title margin-0-i"
+                        matTooltip="{{
+                            'service.dialog.read_tooltip' | translate
+                        }}"
+                        matTooltipClass="tooltip-teal"
+                    >
+                        {{ 'service.dialog.read_timeout' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">
+                        {{ service['read_timeout'] }}
+                    </p>
                 </div>
                 <div fxFlex="25">
-                    <p class="title margin-0-i" matTooltip="{{'service.dialog.write_tooltip' | translate}}"
-                       matTooltipClass="tooltip-teal">{{'service.dialog.write_timeout' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['write_timeout']}}</p>
+                    <p
+                        class="title margin-0-i"
+                        matTooltip="{{
+                            'service.dialog.write_tooltip' | translate
+                        }}"
+                        matTooltipClass="tooltip-teal"
+                    >
+                        {{ 'service.dialog.write_timeout' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">
+                        {{ service['write_timeout'] }}
+                    </p>
                 </div>
             </div>
 
             <div class="margin-top-10-i" fxLayout="row">
                 <div fxFlex="50">
-                    <p class="title margin-0-i" matTooltip="{{'service.dialog.certificate_tooltip' | translate}}"
-                       matTooltipClass="tooltip-teal">{{'service.dialog.certificate' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service?.client_certificate?.id}}</p>
+                    <p
+                        class="title margin-0-i"
+                        matTooltip="{{
+                            'service.dialog.certificate_tooltip' | translate
+                        }}"
+                        matTooltipClass="tooltip-teal"
+                    >
+                        {{ 'service.dialog.certificate' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">
+                        {{ service?.client_certificate?.id }}
+                    </p>
                 </div>
                 <div fxFlex="25">
-                    <p class="title margin-0-i" matTooltip="{{'service.dialog.tls_verify_tooltip' | translate}}"
-                       matTooltipClass="tooltip-teal">{{'service.dialog.tls_verify' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['tls_verify']}}</p>
+                    <p
+                        class="title margin-0-i"
+                        matTooltip="{{
+                            'service.dialog.tls_verify_tooltip' | translate
+                        }}"
+                        matTooltipClass="tooltip-teal"
+                    >
+                        {{ 'service.dialog.tls_verify' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">
+                        {{ service['tls_verify'] }}
+                    </p>
                 </div>
                 <div fxFlex="25">
-                    <p class="title margin-0-i" matTooltip="{{'service.dialog.tls_verify_depth_tooltip' | translate}}"
-                       matTooltipClass="tooltip-teal">{{'service.dialog.tls_verify_depth' | translate}}</p>
-                    <p class="text margin-left-20-i">{{service['tls_verify_depth']}}</p>
+                    <p
+                        class="title margin-0-i"
+                        matTooltip="{{
+                            'service.dialog.tls_verify_depth_tooltip'
+                                | translate
+                        }}"
+                        matTooltipClass="tooltip-teal"
+                    >
+                        {{ 'service.dialog.tls_verify_depth' | translate }}
+                    </p>
+                    <p class="text margin-left-20-i">
+                        {{ service['tls_verify_depth'] }}
+                    </p>
                 </div>
             </div>
             <div fxLayout="row">
-                <p class="title" matTooltip="{{'service.dialog.ca_certificates_tooltip' | translate}}"
-                   matTooltipClass="tooltip-teal">{{'service.dialog.ca_certificates' | translate}}</p>
+                <p
+                    class="title"
+                    matTooltip="{{
+                        'service.dialog.ca_certificates_tooltip' | translate
+                    }}"
+                    matTooltipClass="tooltip-teal"
+                >
+                    {{ 'service.dialog.ca_certificates' | translate }}
+                </p>
                 <div>
-                    <p *ngFor="let ca of service['ca_certificates']">{{ca}}</p>
+                    <p *ngFor="let ca of service['ca_certificates']">
+                        {{ ca }}
+                    </p>
                 </div>
             </div>
         </mat-dialog-content>
     </div>
 
-    <mat-divider *ngIf="!loading" class="margin-bottom-10-i margin-top-10-i"></mat-divider>
+    <mat-divider
+        *ngIf="!loading"
+        class="margin-bottom-10-i margin-top-10-i"
+    ></mat-divider>
 
-    <mat-dialog-actions *ngIf="!loading" fxFlex fxLayout="row" fxLayoutAlign="space-between">
-        <mat-chip-list *ngIf="service" matTooltip="{{'text.tags' | translate}}" matTooltipClass="tooltip-teal">
-            <mat-chip *ngFor="let chip of service['tags']" color="primary">{{chip}}</mat-chip>
+    <mat-dialog-actions
+        *ngIf="!loading"
+        fxFlex
+        fxLayout="row"
+        fxLayoutAlign="space-between"
+    >
+        <mat-chip-list
+            *ngIf="service"
+            matTooltip="{{ 'text.tags' | translate }}"
+            matTooltipClass="tooltip-teal"
+        >
+            <mat-chip *ngFor="let chip of service['tags']" color="primary">{{
+                chip
+            }}</mat-chip>
         </mat-chip-list>
         <div><!-- leave empty --></div>
-        <button cdkFocusInitial color="accent" mat-dialog-close="null" mat-flat-button>{{'text.accept' | translate}}</button>
+        <button
+            cdkFocusInitial
+            color="accent"
+            mat-dialog-close="null"
+            mat-flat-button
+        >
+            {{ 'text.accept' | translate }}
+        </button>
     </mat-dialog-actions>
 </div>

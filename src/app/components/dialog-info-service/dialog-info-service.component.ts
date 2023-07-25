@@ -9,31 +9,35 @@ import { ToastService } from '../../services/toast.service';
 @Component({
     selector: 'app-dialog-info-service',
     templateUrl: './dialog-info-service.component.html',
-    styleUrls: ['./dialog-info-service.component.scss']
+    styleUrls: ['./dialog-info-service.component.scss'],
 })
 export class DialogInfoServiceComponent implements OnInit, OnDestroy {
-    service;
+    service: any;
     loading = true;
 
-    constructor(@Inject(MAT_DIALOG_DATA) public serviceId: string, private api: ApiService, private toast: ToastService) { }
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public serviceId: string,
+        private api: ApiService,
+        private toast: ToastService
+    ) {}
 
     ngOnInit(): void {
         // Recojo los datos del api
-        this.api.getService(this.serviceId)
-            .subscribe({
-                next: (service) => {
-                    this.service = service;
-                },
-                error: (error) => this.toast.error_general(error)
-                , complete: () => this.loading = false
-            });
+        this.api.getService(this.serviceId).subscribe({
+            next: (service) => {
+                this.service = service;
+            },
+            error: (error) => this.toast.error_general(error),
+            complete: () => (this.loading = false),
+        });
     }
 
-    ngOnDestroy(): void {
-    }
+    ngOnDestroy(): void {}
 
     downloadJson() {
-        const blob = new Blob([JSON.stringify(this.service, null, 2)], {type: 'text/json'});
+        const blob = new Blob([JSON.stringify(this.service, null, 2)], {
+            type: 'text/json',
+        });
         saveAs(blob, 'service_' + this.serviceId + '.json');
     }
 }

@@ -1,14 +1,29 @@
 <div fxLayout="column" fxLayoutAlign="start stretch">
-    <h2 class="margin-bottom-5-i" fxFlex fxLayout="row" fxLayoutAlign="space-between start" mat-dialog-title>
-        <span>{{'route.dialog.info' | translate}}</span>
+    <h2
+        class="margin-bottom-5-i"
+        fxFlex
+        fxLayout="row"
+        fxLayoutAlign="space-between start"
+        mat-dialog-title
+    >
+        <span>{{ 'route.dialog.info' | translate }}</span>
 
         <span fxFlexAlign="end">
-            <a href="https://docs.konghq.com/gateway/latest/admin-api/#route-object" mat-button rel="noopener noreferrer" target="_blank">
-                {{'text.documentation' | translate}}
+            <a
+                href="https://docs.konghq.com/gateway/latest/admin-api/#route-object"
+                mat-button
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                {{ 'text.documentation' | translate }}
                 <mat-icon class="mini-icon">open_in_new</mat-icon>
             </a>
-            <button (click)="downloadJson()" mat-icon-button
-                    matTooltip="{{'dialog.download_json' | translate}}" matTooltipClass="tooltip-teal">
+            <button
+                (click)="downloadJson()"
+                mat-icon-button
+                matTooltip="{{ 'dialog.download_json' | translate }}"
+                matTooltipClass="tooltip-teal"
+            >
                 <mat-icon>download</mat-icon>
             </button>
         </span>
@@ -18,140 +33,278 @@
 
     <div [fxShow]="loading" fxFlex fxLayoutAlign="center center">
         <p fxFlex="50">
-            <mat-progress-bar color="accent" mode="indeterminate"></mat-progress-bar>
+            <mat-progress-bar
+                color="accent"
+                mode="indeterminate"
+            ></mat-progress-bar>
         </p>
     </div>
 
-    <div fxFlex>
-        <mat-dialog-content *ngIf="route && !loading" class="margin-0-i">
-            <div fxLayout="row">
-                <div fxFlex="50">
-                    <p class="title margin-0-i">{{'text.name' | translate}}</p>
-                    <p class="text margin-left-20-i">{{route['name']}}</p>
-                </div>
-                <div fxFlex="50">
-                    <p class="title margin-0-i">{{'text.id' | translate}}</p>
-                    <p class="text margin-left-20-i">{{route['id']}}</p>
-                </div>
+    <mat-dialog-content *ngIf="route && !loading" class="margin-0-i">
+        <div fxLayout="row">
+            <div fxFlex="50">
+                <p class="title margin-0-i">
+                    {{ 'text.name' | translate }}
+                </p>
+                <p class="text margin-left-20-i">{{ route['name'] }}</p>
             </div>
-            <div fxLayout="row">
-                <div fxFlex="50">
-                    <p class="title margin-0-i">{{'text.created_at' | translate}}</p>
-                    <p class="text margin-left-20-i">{{route['created_at'] * 1000 | date:'medium'}}</p>
-                </div>
-                <div fxFlex="50">
-                    <p class="title margin-0-i">{{'text.updated_at' | translate}}</p>
-                    <p class="text margin-left-20-i">{{route['updated_at'] * 1000 | date:'medium'}}</p>
-                </div>
+            <div fxFlex="50">
+                <p class="title margin-0-i">{{ 'text.id' | translate }}</p>
+                <p class="text margin-left-20-i">{{ route['id'] }}</p>
             </div>
-
-            <div class="margin-top-10-i" fxLayout="row">
-                <div fxFlex="25">
-                    <p class="title margin-0-i">{{'service.label' | translate}}</p>
-                    <p class="text margin-left-20-i margin-0-i" matTooltip="{{route['service']['id']}}"
-                       matTooltipClass="tooltip-teal">{{ getServiceName(route['service']['id']) }}</p>
-                </div>
-                <div fxFlex="25">
-                    <p class="title margin-0-i">{{'route.dialog.protocols' | translate}}</p>
-                    <p class="text margin-left-20-i">{{ (route['protocols'] || []).join(', ')}}</p>
-                </div>
-                <div *ngIf="!expressions" fxFlex="25">
-                    <p class="title margin-0-i">{{'route.dialog.methods' | translate}}</p>
-                    <p class="text margin-left-20-i">{{ (route['methods'] || []).join(', ')}}</p>
-                </div>
-                <div fxFlex="25">
-                    <p class="title margin-0-i" matTooltip="{{'route.dialog.redirect_tooltip' | translate}}"
-                       matTooltipClass="tooltip-teal">{{'route.dialog.redirect' | translate}}</p>
-                    <p class="text margin-left-20-i">{{route['https_redirect_status_code']}}</p>
-                </div>
+        </div>
+        <div fxLayout="row">
+            <div fxFlex="50">
+                <p class="title margin-0-i">
+                    {{ 'text.created_at' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ route['created_at'] * 1000 | date : 'medium' }}
+                </p>
             </div>
-
-            <div *ngIf="!expressions" class="margin-top-10-i" fxLayout="row">
-                <div fxFlex="25">
-                    <p class="title margin-0-i" matTooltip="{{'route.dialog.hosts_tooltip' | translate}}"
-                       matTooltipClass="tooltip-teal">{{'route.dialog.hosts' | translate}}</p>
-                    <p class="text margin-left-20-i">{{ (route['hosts'] || []).join(', ')}}</p>
-                </div>
-                <div fxFlex="50">
-                    <p class="title margin-0-i" matTooltip="{{'route.dialog.paths_tooltip' | translate}}"
-                       matTooltipClass="tooltip-teal">{{'route.dialog.paths' | translate}}</p>
-                    <p class="text margin-left-20-i">{{ (route['paths'] || []).join(', ')}}</p>
-                </div>
-                <div fxFlex="25">
-                    <p class="title margin-0-i" matTooltip="{{'route.dialog.snis_tooltip' | translate}}"
-                       matTooltipClass="tooltip-teal">{{'route.dialog.snis' | translate}}</p>
-                    <p class="text margin-left-20-i">{{ getSnis() }}</p>
-                </div>
+            <div fxFlex="50">
+                <p class="title margin-0-i">
+                    {{ 'text.updated_at' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ route['updated_at'] * 1000 | date : 'medium' }}
+                </p>
             </div>
+        </div>
 
-            <div *ngIf="!expressions" class="margin-top-10-i" fxLayout="row">
-                <div fxFlex="50">
-                    <p class="title margin-0-i">{{'route.dialog.headers' | translate}}</p>
-                    <p *ngFor="let h of drawHeaders(route['headers'])" class="text margin-left-20-i">{{ h }}</p>
-                </div>
-                <div fxFlex="25">
-                    <p class="title margin-0-i">{{'route.dialog.path_handling' | translate}}</p>
-                    <p class="text margin-left-20-i">{{route['path_handling']}}</p>
-                </div>
-                <div fxFlex="25">
-                    <p class="title margin-0-i" matTooltip="{{'route.dialog.regex_tooltip' | translate}}"
-                       matTooltipClass="tooltip-teal">{{'route.dialog.regex_priority' | translate}}</p>
-                    <p class="text margin-left-20-i">{{route['regex_priority']}}</p>
-                </div>
+        <div class="margin-top-10-i" fxLayout="row">
+            <div fxFlex="25">
+                <p class="title margin-0-i">
+                    {{ 'service.label' | translate }}
+                </p>
+                <p
+                    class="text margin-left-20-i margin-0-i"
+                    matTooltip="{{ route['service']['id'] }}"
+                    matTooltipClass="tooltip-teal"
+                >
+                    {{ getServiceName(route['service']['id']) }}
+                </p>
             </div>
-
-            <div *ngIf="expressions" class="margin-top-10-i" fxLayout="row">
-                <div fxFlex="75">
-                    <p class="title margin-0-i">{{'route.dialog.expression' | translate}}</p>
-                    <p class="text margin-left-20-i">{{route['expression']}}</p>
-                </div>
-                <div fxFlex="25">
-                    <p class="title margin-0-i">{{'route.dialog.priority' | translate}}</p>
-                    <p class="text margin-left-20-i">{{route['priority']}}</p>
-                </div>
+            <div fxFlex="25">
+                <p class="title margin-0-i">
+                    {{ 'route.dialog.protocols' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ (route['protocols'] || []).join(', ') }}
+                </p>
             </div>
-
-            <div class="margin-top-10-i" fxLayout="row">
-                <div fxFlex="25">
-                    <p class="title margin-0-i" matTooltip="{{'route.dialog.preserve_host_tooltip' | translate}}"
-                       matTooltipClass="tooltip-teal">{{'route.dialog.preserve_host' | translate}}</p>
-                    <p class="text margin-left-20-i">{{route['preserve_host']}}</p>
-                </div>
-                <div fxFlex="25">
-                    <p class="title margin-0-i" matTooltip="{{'route.dialog.strip_path_tooltip' | translate}}"
-                       matTooltipClass="tooltip-teal">{{'route.dialog.strip_path' | translate}}</p>
-                    <p class="text margin-left-20-i">{{route['strip_path']}}</p>
-                </div>
-                <div fxFlex="25">
-                    <p class="title margin-0-i">{{'route.dialog.request_buffering' | translate}}</p>
-                    <p class="text margin-left-20-i">{{route['request_buffering']}}</p>
-                </div>
-                <div fxFlex="25">
-                    <p class="title margin-0-i">{{'route.dialog.response_buffering' | translate}}</p>
-                    <p class="text margin-left-20-i">{{route['response_buffering']}}</p>
-                </div>
+            <div *ngIf="!expressions" fxFlex="25">
+                <p class="title margin-0-i">
+                    {{ 'route.dialog.methods' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ (route['methods'] || []).join(', ') }}
+                </p>
             </div>
-
-            <div *ngIf="!expressions" class="margin-top-10-i" fxLayout="row">
-                <div fxFlex="50">
-                    <p class="title margin-0-i">{{'route.dialog.sources' | translate}}</p>
-                    <p *ngFor="let s of route['sources']" class="text margin-left-20-i">{{ drawIpPort(s) }}</p>
-                </div>
-                <div fxFlex="50">
-                    <p class="title margin-0-i">{{'route.dialog.destinations' | translate}}</p>
-                    <p *ngFor="let d of route['destinations']" class="text margin-left-20-i">{{ drawIpPort(d) }}</p>
-                </div>
+            <div fxFlex="25">
+                <p
+                    class="title margin-0-i"
+                    matTooltip="{{
+                        'route.dialog.redirect_tooltip' | translate
+                    }}"
+                    matTooltipClass="tooltip-teal"
+                >
+                    {{ 'route.dialog.redirect' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ route['https_redirect_status_code'] }}
+                </p>
             </div>
-        </mat-dialog-content>
-    </div>
+        </div>
 
-    <mat-divider *ngIf="!loading" class="margin-bottom-10-i margin-top-10-i"></mat-divider>
+        <div *ngIf="!expressions" class="margin-top-10-i" fxLayout="row">
+            <div fxFlex="25">
+                <p
+                    class="title margin-0-i"
+                    matTooltip="{{ 'route.dialog.hosts_tooltip' | translate }}"
+                    matTooltipClass="tooltip-teal"
+                >
+                    {{ 'route.dialog.hosts' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ (route['hosts'] || []).join(', ') }}
+                </p>
+            </div>
+            <div fxFlex="50">
+                <p
+                    class="title margin-0-i"
+                    matTooltip="{{ 'route.dialog.paths_tooltip' | translate }}"
+                    matTooltipClass="tooltip-teal"
+                >
+                    {{ 'route.dialog.paths' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ (route['paths'] || []).join(', ') }}
+                </p>
+            </div>
+            <div fxFlex="25">
+                <p
+                    class="title margin-0-i"
+                    matTooltip="{{ 'route.dialog.snis_tooltip' | translate }}"
+                    matTooltipClass="tooltip-teal"
+                >
+                    {{ 'route.dialog.snis' | translate }}
+                </p>
+                <p class="text margin-left-20-i">{{ getSnis() }}</p>
+            </div>
+        </div>
 
-    <mat-dialog-actions *ngIf="!loading" fxFlex fxLayout="row" fxLayoutAlign="space-between">
-        <mat-chip-list *ngIf="route" matTooltip="{{'text.tags' | translate}}" matTooltipClass="tooltip-teal">
-            <mat-chip *ngFor="let chip of route['tags']" color="primary">{{chip}}</mat-chip>
+        <div *ngIf="!expressions" class="margin-top-10-i" fxLayout="row">
+            <div fxFlex="50">
+                <p class="title margin-0-i">
+                    {{ 'route.dialog.headers' | translate }}
+                </p>
+                <p
+                    *ngFor="let h of drawHeaders(route['headers'])"
+                    class="text margin-left-20-i"
+                >
+                    {{ h }}
+                </p>
+            </div>
+            <div fxFlex="25">
+                <p class="title margin-0-i">
+                    {{ 'route.dialog.path_handling' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ route['path_handling'] }}
+                </p>
+            </div>
+            <div fxFlex="25">
+                <p
+                    class="title margin-0-i"
+                    matTooltip="{{ 'route.dialog.regex_tooltip' | translate }}"
+                    matTooltipClass="tooltip-teal"
+                >
+                    {{ 'route.dialog.regex_priority' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ route['regex_priority'] }}
+                </p>
+            </div>
+        </div>
+
+        <div *ngIf="expressions" class="margin-top-10-i" fxLayout="row">
+            <div fxFlex="75">
+                <p class="title margin-0-i">
+                    {{ 'route.dialog.expression' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ route['expression'] }}
+                </p>
+            </div>
+            <div fxFlex="25">
+                <p class="title margin-0-i">
+                    {{ 'route.dialog.priority' | translate }}
+                </p>
+                <p class="text margin-left-20-i">{{ route['priority'] }}</p>
+            </div>
+        </div>
+
+        <div class="margin-top-10-i" fxLayout="row">
+            <div fxFlex="25">
+                <p
+                    class="title margin-0-i"
+                    matTooltip="{{
+                        'route.dialog.preserve_host_tooltip' | translate
+                    }}"
+                    matTooltipClass="tooltip-teal"
+                >
+                    {{ 'route.dialog.preserve_host' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ route['preserve_host'] }}
+                </p>
+            </div>
+            <div fxFlex="25">
+                <p
+                    class="title margin-0-i"
+                    matTooltip="{{
+                        'route.dialog.strip_path_tooltip' | translate
+                    }}"
+                    matTooltipClass="tooltip-teal"
+                >
+                    {{ 'route.dialog.strip_path' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ route['strip_path'] }}
+                </p>
+            </div>
+            <div fxFlex="25">
+                <p class="title margin-0-i">
+                    {{ 'route.dialog.request_buffering' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ route['request_buffering'] }}
+                </p>
+            </div>
+            <div fxFlex="25">
+                <p class="title margin-0-i">
+                    {{ 'route.dialog.response_buffering' | translate }}
+                </p>
+                <p class="text margin-left-20-i">
+                    {{ route['response_buffering'] }}
+                </p>
+            </div>
+        </div>
+
+        <div *ngIf="!expressions" class="margin-top-10-i" fxLayout="row">
+            <div fxFlex="50">
+                <p class="title margin-0-i">
+                    {{ 'route.dialog.sources' | translate }}
+                </p>
+                <p
+                    *ngFor="let s of route['sources']"
+                    class="text margin-left-20-i"
+                >
+                    {{ drawIpPort(s) }}
+                </p>
+            </div>
+            <div fxFlex="50">
+                <p class="title margin-0-i">
+                    {{ 'route.dialog.destinations' | translate }}
+                </p>
+                <p
+                    *ngFor="let d of route['destinations']"
+                    class="text margin-left-20-i"
+                >
+                    {{ drawIpPort(d) }}
+                </p>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-divider
+        *ngIf="!loading"
+        class="margin-bottom-10-i margin-top-10-i"
+    ></mat-divider>
+
+    <mat-dialog-actions
+        *ngIf="!loading"
+        fxFlex
+        fxLayout="row"
+        fxLayoutAlign="space-between start"
+    >
+        <mat-chip-list
+            *ngIf="route"
+            matTooltip="{{ 'text.tags' | translate }}"
+            matTooltipClass="tooltip-teal"
+        >
+            <mat-chip *ngFor="let chip of route['tags']" color="primary">{{
+                chip
+            }}</mat-chip>
         </mat-chip-list>
         <div><!-- leave empty --></div>
-        <button cdkFocusInitial color="accent" mat-dialog-close="null" mat-flat-button>{{'text.accept' | translate}}</button>
+        <button
+            cdkFocusInitial
+            color="accent"
+            mat-dialog-close="null"
+            mat-flat-button
+        >
+            {{ 'text.accept' | translate }}
+        </button>
     </mat-dialog-actions>
 </div>

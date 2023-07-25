@@ -16,10 +16,20 @@ import { ToastService } from '../../../services/toast.service';
 @Component({
     selector: 'app-plugin-list',
     templateUrl: './plugin-list.component.html',
-    styleUrls: ['./plugin-list.component.scss']
+    styleUrls: ['./plugin-list.component.scss'],
 })
 export class PluginListComponent implements OnInit, OnDestroy {
-    displayedColumns: string[] = ['enabled', 'id', 'name', 'route', 'service', 'consumer', 'protocols', 'tags', 'actions'];
+    displayedColumns: string[] = [
+        'enabled',
+        'id',
+        'name',
+        'route',
+        'service',
+        'consumer',
+        'protocols',
+        'tags',
+        'actions',
+    ];
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -31,16 +41,20 @@ export class PluginListComponent implements OnInit, OnDestroy {
     loading = false;
     filter = '';
 
-    constructor(private api: ApiService, private toast: ToastService, private route: Router, private dialogHelper: DialogHelperService, private dialog: MatDialog) {
-    }
+    constructor(
+        private api: ApiService,
+        private toast: ToastService,
+        private route: Router,
+        private dialogHelper: DialogHelperService,
+        private dialog: MatDialog
+    ) {}
 
     ngOnInit(): void {
         // Aquí para que no error de ExpressionChangedAfterItHasBeenCheckedError
         this.reloadData(true);
     }
 
-    ngOnDestroy(): void {
-    }
+    ngOnDestroy(): void {}
 
     reloadData(all: boolean, cleanFilter: boolean = false) {
         this.loading = true;
@@ -48,32 +62,31 @@ export class PluginListComponent implements OnInit, OnDestroy {
             this.filter = '';
         }
 
-        this.getData(all)
-            .subscribe({
-                next: (value) => {
-                    this.dataSource = new MatTableDataSource(value.plugins);
-                    this.dataSource.paginator = this.paginator;
-                    this.dataSource.sort = this.sort;
+        this.getData(all).subscribe({
+            next: (value) => {
+                this.dataSource = new MatTableDataSource(value.plugins);
+                this.dataSource.paginator = this.paginator;
+                this.dataSource.sort = this.sort;
 
-                    // Si he cogido todos los datos, los proceso
-                    if (all) {
-                        value['services'].forEach(serv => {
-                            this.services[serv.id] = serv.name;
-                        });
-                        value['routes'].forEach(route => {
-                            this.routes[route.id] = route.name;
-                        });
-                        value['consumers'].forEach(consumer => {
-                            this.consumers[consumer.id] = consumer.username;
-                        });
-                    }
-                },
-                error: () => this.toast.error('error.node_connection'),
-                complete: () => {
-                    this.loading = false;
-                    this.applyFilter();
+                // Si he cogido todos los datos, los proceso
+                if (all) {
+                    value['services'].forEach((serv) => {
+                        this.services[serv.id] = serv.name;
+                    });
+                    value['routes'].forEach((route) => {
+                        this.routes[route.id] = route.name;
+                    });
+                    value['consumers'].forEach((consumer) => {
+                        this.consumers[consumer.id] = consumer.username;
+                    });
                 }
-            });
+            },
+            error: () => this.toast.error('error.node_connection'),
+            complete: () => {
+                this.loading = false;
+                this.applyFilter();
+            },
+        });
     }
 
     getData(all: boolean) {
@@ -84,15 +97,24 @@ export class PluginListComponent implements OnInit, OnDestroy {
             sources.push(this.api.getRoutes());
             sources.push(this.api.getConsumers());
 
-            return forkJoin(sources).pipe(map(([plugins, services, routes, consumers]) => {
-                // forkJoin returns an array of values, here we map those values to an object
-                return {plugins: plugins['data'], services: services['data'], routes: routes['data'], consumers: consumers['data']};
-            }));
+            return forkJoin(sources).pipe(
+                map(([plugins, services, routes, consumers]) => {
+                    // forkJoin returns an array of values, here we map those values to an object
+                    return {
+                        plugins: plugins['data'],
+                        services: services['data'],
+                        routes: routes['data'],
+                        consumers: consumers['data'],
+                    };
+                })
+            );
         } else {
-            return forkJoin(sources).pipe(map(([plugins]) => {
-                // forkJoin returns an array of values, here we map those values to an object
-                return {plugins: plugins['data']};
-            }));
+            return forkJoin(sources).pipe(
+                map(([plugins]) => {
+                    // forkJoin returns an array of values, here we map those values to an object
+                    return { plugins: plugins['data'] };
+                })
+            );
         }
     }
 
@@ -109,7 +131,8 @@ export class PluginListComponent implements OnInit, OnDestroy {
         Añade un elemento nuevo
      */
     addEditPlugin(selected = null) {
-        this.dialogHelper.addEdit(selected, 'plugin')
+        this.dialogHelper
+            .addEdit(selected, 'plugin')
             .then(() => {
                 if (selected) {
                     // Edición
@@ -133,8 +156,11 @@ export class PluginListComponent implements OnInit, OnDestroy {
         Borra el elemento seleccionado
      */
     delete(select) {
-        this.dialogHelper.deleteElement(select, 'plugin')
-            .then(() => { this.reloadData(false); })
+        this.dialogHelper
+            .deleteElement(select, 'plugin')
+            .then(() => {
+                this.reloadData(false);
+            })
             .catch(() => {});
     }
 
@@ -153,25 +179,31 @@ export class PluginListComponent implements OnInit, OnDestroy {
                 content: 'dialog.confirm.' + txt + '_plugin',
                 name: row.name,
                 id: row.id,
-                delete: false
-            }
+                delete: false,
+            },
         };
 
         const dialogRef = this.dialog.open(DialogConfirmComponent, opt);
         dialogRef.afterClosed().subscribe((result) => {
             if (result === 'true') {
-                this.api.enablePlugin(row.id, row.enabled)
-                    .subscribe({
-                        next: () => {
-                            if (row.enabled) {
-                                this.toast.success('success.enabled_plugin', '', {msgExtra: row.name});
-                            } else {
-                                this.toast.success('success.disabled_plugin', '', {msgExtra: row.name});
-                            }
-                            this.reloadData(false);
-                        },
-                        error: (error) => this.toast.error_general(error, {disableTimeOut: true})
-                    });
+                this.api.enablePlugin(row.id, row.enabled).subscribe({
+                    next: () => {
+                        if (row.enabled) {
+                            this.toast.success('success.enabled_plugin', '', {
+                                msgExtra: row.name,
+                            });
+                        } else {
+                            this.toast.success('success.disabled_plugin', '', {
+                                msgExtra: row.name,
+                            });
+                        }
+                        this.reloadData(false);
+                    },
+                    error: (error) =>
+                        this.toast.error_general(error, {
+                            disableTimeOut: true,
+                        }),
+                });
             } else {
                 row.enabled = !row.enabled;
             }
