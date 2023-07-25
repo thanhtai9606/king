@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,10 +20,18 @@ import { ToastService } from '../../../services/toast.service';
 @Component({
     selector: 'app-element-route',
     templateUrl: './element-route.component.html',
-    styleUrls: ['./element-route.component.scss']
+    styleUrls: ['./element-route.component.scss'],
 })
 export class ElementRouteComponent implements OnInit, OnDestroy, AfterViewInit {
-    displayedColumns: string[] = ['id', 'name', 'service', 'protocols', 'expression', 'tags', 'actions'];
+    displayedColumns: string[] = [
+        // 'id',
+        'name',
+        'service',
+        'protocols',
+        'expression',
+        'tags',
+        'actions',
+    ];
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -28,35 +42,52 @@ export class ElementRouteComponent implements OnInit, OnDestroy, AfterViewInit {
     filter = '';
     expressions = true;
 
-    constructor(private api: ApiService, private toast: ToastService, private globals: GlobalsService, private route: Router, private dialogHelper: DialogHelperService) {
-    }
+    constructor(
+        private api: ApiService,
+        private toast: ToastService,
+        private globals: GlobalsService,
+        private route: Router,
+        private dialogHelper: DialogHelperService
+    ) {}
 
     ngOnInit(): void {
         // Aquí para que no error de ExpressionChangedAfterItHasBeenCheckedError
         this.loading = true;
     }
 
-    ngOnDestroy(): void {
-    }
+    ngOnDestroy(): void {}
 
     ngAfterViewInit() {
         // Primero cojo el modo de router
-        this.dialogHelper.getRouterMode().then(() => {
-            // Si no estoy en modo expressions cambio la tabla
-            if (this.globals.ROUTER_MODE !== 'expressions') {
-                this.displayedColumns = ['id', 'name', 'service', 'protocols', 'methods', 'hosts', 'paths', 'headers', 'tags', 'actions'];
-                this.expressions = false;
-            }
-            this.api.getServices()
-                .subscribe({
+        this.dialogHelper
+            .getRouterMode()
+            .then(() => {
+                // Si no estoy en modo expressions cambio la tabla
+                if (this.globals.ROUTER_MODE !== 'expressions') {
+                    this.displayedColumns = [
+                        // 'id',
+                        'name',
+                        'service',
+                        'protocols',
+                        'methods',
+                        'hosts',
+                        'paths',
+                        'headers',
+                        'tags',
+                        'actions',
+                    ];
+                    this.expressions = false;
+                }
+                this.api.getServices().subscribe({
                     next: (ss) => {
                         this.services = ss['data'];
                         this.getRoutes();
                     },
                     error: () => this.toast.error('error.node_connection'),
-                    complete: () => this.loading = false
+                    complete: () => (this.loading = false),
                 });
-        }).catch(() => this.toast.error('error.route_mode'));
+            })
+            .catch(() => this.toast.error('error.route_mode'));
     }
 
     reloadData(cleanFilter = false) {
@@ -69,19 +100,18 @@ export class ElementRouteComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     getRoutes() {
-        this.api.getRoutes()
-            .subscribe({
-                next: (value) => {
-                    this.dataSource = new MatTableDataSource(value['data']);
-                    this.dataSource.paginator = this.paginator;
-                    this.dataSource.sort = this.sort;
-                },
-                error: () => this.toast.error('error.node_connection'),
-                complete: () => {
-                    this.loading = false;
-                    this.applyFilter();
-                }
-            });
+        this.api.getRoutes().subscribe({
+            next: (value) => {
+                this.dataSource = new MatTableDataSource(value['data']);
+                this.dataSource.paginator = this.paginator;
+                this.dataSource.sort = this.sort;
+            },
+            error: () => this.toast.error('error.node_connection'),
+            complete: () => {
+                this.loading = false;
+                this.applyFilter();
+            },
+        });
     }
 
     applyFilter() {
@@ -97,7 +127,8 @@ export class ElementRouteComponent implements OnInit, OnDestroy, AfterViewInit {
         Añade un servicio nuevo
      */
     addEdit(selected = null) {
-        this.dialogHelper.addEdit(selected, 'route')
+        this.dialogHelper
+            .addEdit(selected, 'route')
             .then(() => {
                 if (selected) {
                     // Edición
@@ -121,8 +152,11 @@ export class ElementRouteComponent implements OnInit, OnDestroy, AfterViewInit {
         Borra el elemento seleccionado
      */
     delete(select) {
-        this.dialogHelper.deleteElement(select, 'route')
-            .then(() => { this.reloadData(); })
+        this.dialogHelper
+            .deleteElement(select, 'route')
+            .then(() => {
+                this.reloadData();
+            })
             .catch(() => {});
     }
 
@@ -130,7 +164,7 @@ export class ElementRouteComponent implements OnInit, OnDestroy, AfterViewInit {
         Busco el nombre entre la lista de servicios
      */
     getServiceName(id) {
-        const service = _find(this.services, {'id': id});
+        const service = _find(this.services, { id: id });
         return service.name;
     }
 

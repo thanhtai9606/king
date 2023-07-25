@@ -36,7 +36,7 @@
             <!-- Name Column -->
             <ng-container matColumnDef="name">
                 <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'text.name' | translate}}</th>
-                <td *matCellDef="let row" mat-cell>{{row.name}}</td>
+                <td *matCellDef="let row" mat-cell><a (click)="showInfo(row)" class="text-small" color="accent" mat-button>{{row.name}}</a></td>
             </ng-container>
 
             <ng-container matColumnDef="service">

@@ -17,18 +17,18 @@ describe('ElementRouteComponent', () => {
         await TestBed.configureTestingModule({
             declarations: [ElementRouteComponent],
             providers: [
-                {provide: Router, useValue: {}},
-                {provide: MatDialog, useValue: {}},
-                {provide: MAT_DIALOG_DATA, useValue: {}}
-            ], imports: [
+                { provide: Router, useValue: {} },
+                { provide: MatDialog, useValue: {} },
+                { provide: MAT_DIALOG_DATA, useValue: {} },
+            ],
+            imports: [
                 CommonModule,
                 HttpClientModule,
                 AppRoutingModule,
                 TranslateModule.forRoot(),
-                ToastrModule.forRoot()
-            ]
-        })
-            .compileComponents();
+                ToastrModule.forRoot(),
+            ],
+        }).compileComponents();
     });
 
     beforeEach(() => {

@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,10 +18,22 @@ import { ToastService } from '../../../services/toast.service';
 @Component({
     selector: 'app-element-service',
     templateUrl: './element-service.component.html',
-    styleUrls: ['./element-service.component.scss']
+    styleUrls: ['./element-service.component.scss'],
 })
-export class ElementServiceComponent implements OnInit, OnDestroy, AfterViewInit {
-    displayedColumns: string[] = ['id', 'name', 'protocol', 'host', 'port', 'path', 'ssl', 'enabled', 'tags', 'actions'];
+export class ElementServiceComponent
+    implements OnInit, OnDestroy, AfterViewInit
+{
+    displayedColumns: string[] = [
+        'name',
+        'protocol',
+        'host',
+        'port',
+        'path',
+        'ssl',
+        'enabled',
+        'tags',
+        'actions',
+    ];
     dataSource: MatTableDataSource<any>;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
@@ -24,16 +42,19 @@ export class ElementServiceComponent implements OnInit, OnDestroy, AfterViewInit
     loading = false;
     filter = '';
 
-    constructor(private api: ApiService, private toast: ToastService, private route: Router, private dialogHelper: DialogHelperService) {
-    }
+    constructor(
+        private api: ApiService,
+        private toast: ToastService,
+        private route: Router,
+        private dialogHelper: DialogHelperService
+    ) {}
 
     ngOnInit(): void {
         // Aquí para que no error de ExpressionChangedAfterItHasBeenCheckedError
         this.loading = true;
     }
 
-    ngOnDestroy(): void {
-    }
+    ngOnDestroy(): void {}
 
     ngAfterViewInit() {
         this.reloadData();
@@ -45,19 +66,18 @@ export class ElementServiceComponent implements OnInit, OnDestroy, AfterViewInit
             this.filter = '';
         }
 
-        this.api.getServices()
-            .subscribe({
-                next: (value) => {
-                    this.dataSource = new MatTableDataSource(value['data']);
-                    this.dataSource.paginator = this.paginator;
-                    this.dataSource.sort = this.sort;
-                },
-                error: () => this.toast.error('error.node_connection'),
-                complete: () => {
-                    this.loading = false;
-                    this.applyFilter();
-                }
-            });
+        this.api.getServices().subscribe({
+            next: (value) => {
+                this.dataSource = new MatTableDataSource(value['data']);
+                this.dataSource.paginator = this.paginator;
+                this.dataSource.sort = this.sort;
+            },
+            error: () => this.toast.error('error.node_connection'),
+            complete: () => {
+                this.loading = false;
+                this.applyFilter();
+            },
+        });
     }
 
     applyFilter() {
@@ -73,7 +93,8 @@ export class ElementServiceComponent implements OnInit, OnDestroy, AfterViewInit
         Añade un servicio nuevo
      */
     addEdit(selected = null) {
-        this.dialogHelper.addEdit(selected, 'service')
+        this.dialogHelper
+            .addEdit(selected, 'service')
             .then(() => {
                 if (selected) {
                     // Edición
@@ -97,8 +118,11 @@ export class ElementServiceComponent implements OnInit, OnDestroy, AfterViewInit
         Borra el elemento seleccionado
      */
     delete(select) {
-        this.dialogHelper.deleteElement(select, 'service')
-            .then(() => { this.reloadData(); })
+        this.dialogHelper
+            .deleteElement(select, 'service')
+            .then(() => {
+                this.reloadData();
+            })
             .catch(() => {});
     }
 }
